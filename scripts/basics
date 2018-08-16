@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e  # Exit immediately if a command exits with a non-zero status.
+set -x  # All executed commands are printed to the terminal
+
+aptitude update ; aptitude install -R -y gnupg gpgsm openvpn openssl
+mkdir /etc/openvpn/keys
+chmod 700 /etc/openvpn/keys
+openvpn --genkey --secret /etc/openvpn/keys/ta.key
+chmod 400 /etc/openvpn/keys/ta.key
+touch /etc/openvpn/keys/Client.key
+chmod 400 /etc/openvpn/keys/Client.key
+touch /etc/openvpn/CA.cer /etc/openvpn/Client.cer
+chmod 444 /etc/openvpn/CA.cer /etc/openvpn/Client.cer
+
+chmod 700 /etc/skel/.gnupg
+cp -r /etc/skel/.gnupg/ /root
+
+apt-get -y autoremove ; aptitude -y autoclean ; apt-get -y autoclean
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.aptitude /etc/openvpn/server /etc/openvpn/client
