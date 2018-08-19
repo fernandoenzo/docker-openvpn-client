@@ -7,7 +7,7 @@ Wants=network-online.target
 
 [Service]
 TimeoutStartSec=infinity
-ExecStartPre=/usr/bin/docker run -d -it --init --rm --net=host --cap-add=NET_ADMIN --device /dev/net/tun --name OpenVPN-Client --hostname OpenVPN-Client fernandoenzo/openvpn-client
+ExecStartPre=/usr/bin/docker run -d -it --init --rm -v /etc/resolv.conf:/etc/resolv.conf --net=host --cap-add=NET_ADMIN --device /dev/net/tun --name OpenVPN-Client --hostname OpenVPN-Client fernandoenzo/openvpn-client
 ExecStart=/usr/bin/docker logs -f OpenVPN-Client
 ExecStop=-/usr/bin/docker stop OpenVPN-Client
 SuccessExitStatus=143

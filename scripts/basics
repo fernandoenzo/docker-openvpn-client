@@ -3,7 +3,9 @@
 set -e  # Exit immediately if a command exits with a non-zero status.
 set -x  # All executed commands are printed to the terminal
 
-aptitude update ; aptitude install -R -y gnupg gpgsm openvpn openssl
+aptitude update ; aptitude install -R -y debconf-utils gnupg gpgsm openvpn openssl
+echo resolvconf resolvconf/linkify-resolvconf boolean false | debconf-set-selections
+aptitude install -y resolvconf
 mkdir /etc/openvpn/keys
 chmod 700 /etc/openvpn/keys
 openvpn --genkey --secret /etc/openvpn/keys/ta.key
