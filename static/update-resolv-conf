@@ -16,7 +16,6 @@
 #
 # Script from https://github.com/cdrage/dockerfiles/blob/master/openvpn-client-docker/update-resolv-conf
 
-[ -x /sbin/resolvconf ] || exit 0
 [ "$script_type" ] || exit 0
 [ "$dev" ] || exit 0
 
@@ -51,18 +50,13 @@ case "$script_type" in
 "
   done
 
-  # Remove the original default route to avoid leaks.
-  # route del default gw "${route_net_gateway}"
-
   # The docker container's /etc/resolv.conf is not a soft link as expected
   # by resolvconf.  And it can be modified, but not removed or copied.
   #
-  echo -n "$R" | /sbin/resolvconf -a "${dev}.openvpn"
-  cat /etc/resolv.conf > /tmp/resolv.conf
-  cat /var/run/resolvconf/interface/${dev}.openvpn > /etc/resolv.conf
+  cat /etc/resolv.conf > /tmp/resolv.conf.orig
+  echo -n "$R" > /etc/resolv.conf
   ;;
   down)
-  /sbin/resolvconf -d "${dev}.openvpn"
-  cat /tmp/resolv.conf > /etc/resolv.conf
+  cat /tmp/resolv.conf.orig > /etc/resolv.conf
   ;;
 esac
