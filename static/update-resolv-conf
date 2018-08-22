@@ -53,10 +53,10 @@ case "$script_type" in
   # The docker container's /etc/resolv.conf is not a soft link as expected
   # by resolvconf.  And it can be modified, but not removed or copied.
   #
-  cat /etc/resolv.conf > /tmp/resolv.conf.orig
+  cp /etc/resolv.conf /tmp/docker-openvpn/resolv.conf.orig
   echo -n "$R" > /etc/resolv.conf
   ;;
   down)
-  cat /tmp/resolv.conf.orig > /etc/resolv.conf
+  cat /tmp/docker-openvpn/resolv.conf.orig > /etc/resolv.conf
   ;;
 esac

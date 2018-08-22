@@ -7,11 +7,10 @@ Wants=network-online.target
 
 [Service]
 TimeoutStartSec=infinity
-ExecStartPre=-/bin/sh -c "mkdir -p /tmp/docker-openvpn/ && cp /etc/resolv.conf /tmp/docker-openvpn/resolv.conf.orig"
-ExecStartPre=/usr/bin/docker run -d -it --init --rm -v /etc/resolv.conf:/etc/resolv.conf --net=host --cap-add=NET_ADMIN --device /dev/net/tun --name OpenVPN-Client --hostname OpenVPN-Client fernandoenzo/openvpn-client
+ExecStartPre=/usr/bin/docker run -d -it --init --rm -v /etc/resolv.conf:/etc/resolv.conf -v /tmp/docker-openvpn/:/tmp/docker-openvpn/ --net=host --cap-add=NET_ADMIN --device /dev/net/tun --name OpenVPN-Client --hostname OpenVPN-Client fernandoenzo/openvpn-client
 ExecStart=/usr/bin/docker logs -f OpenVPN-Client
 ExecStop=-/usr/bin/docker stop OpenVPN-Client
-ExecStop=-/bin/sh -c "[ -f /tmp/docker-openvpn/resolv.conf.orig ] && cp /tmp/docker-openvpn/resolv.conf.orig /etc/resolv.conf || echo 'nameserver 1.1.1.1' > /etc/resolv.conf"
+ExecStop=-/bin/sh -c "[ -f /tmp/docker-openvpn/resolv.conf.orig ] && cp /tmp/docker-openvpn/resolv.conf.orig /etc/resolv.conf"
 SuccessExitStatus=143
 
 [Install]
