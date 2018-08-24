@@ -55,8 +55,10 @@ case "$script_type" in
   #
   cp /etc/resolv.conf /tmp/docker-openvpn/resolv.conf.orig
   echo -n "$R" > /etc/resolv.conf
+  echo -n "$R" > /tmp/host/resolv.conf
   ;;
   down)
   cat /tmp/docker-openvpn/resolv.conf.orig > /etc/resolv.conf
+  cat /tmp/docker-openvpn/resolv.conf.orig > /tmp/host/resolv.conf
   ;;
 esac

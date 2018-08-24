@@ -2,6 +2,7 @@
 
 set -e
 
+update-resolv --start
 service cron start > /dev/null 2>&1
 service openvpn start > /dev/null 2>&1
 exec /bin/bash -c "$@"
