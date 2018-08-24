@@ -15,7 +15,7 @@ ExecStartPre=/bin/sh -c "/usr/bin/docker run -d -it --init --rm \
                         fernandoenzo/openvpn-client"
 ExecStart=/usr/bin/docker logs -f OpenVPN-Client
 ExecStop=-/usr/bin/docker stop OpenVPN-Client
-ExecStop=-/bin/sh -c "[ -f /tmp/docker-openvpn/resolv.conf.orig ] && cp /tmp/docker-openvpn/resolv.conf.orig /etc/resolv.conf"
+ExecStop=-/bin/sh -c "[ -f /tmp/docker-openvpn/resolv.conf.orig ] && cp /tmp/docker-openvpn/resolv.conf.orig /etc/resolv.conf ; rm -rf /tmp/docker-openvpn/"
 SuccessExitStatus=143
 
 [Install]
