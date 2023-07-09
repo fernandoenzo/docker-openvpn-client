@@ -15,3 +15,5 @@ chmod 444 /etc/openvpn/CA.cer /etc/openvpn/Client.cer
 
 apt-get -y autoremove ; aptitude -y autoclean ; apt-get -y autoclean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.aptitude /etc/openvpn/server /etc/openvpn/client
+
+mkdir /tmp/docker-openvpn /tmp/host
