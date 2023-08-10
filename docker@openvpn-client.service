@@ -1,12 +1,12 @@
 [Unit]
 Description=Docker OpenVPN Client container
-Requires=docker.service iptables-masquerade@eth0.service
-PartOf=docker.service
+Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
 
 [Service]
 TimeoutStartSec=infinity
+ExecStartPre=-iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j MASQUERADE
 ExecStartPre=/bin/sh -c "/usr/bin/docker run -d -it --init --rm \
                         -v \"$(readlink -f /etc/resolv.conf)\":/tmp/docker-openvpn/name/\"$(basename $(readlink -f /etc/resolv.conf))\":ro \
                         -v \"$(dirname $(readlink -f /etc/resolv.conf))\":/tmp/host -v /tmp/docker-openvpn/:/tmp/docker-openvpn/ \
@@ -16,6 +16,7 @@ ExecStartPre=/bin/sh -c "/usr/bin/docker run -d -it --init --rm \
 ExecStart=/usr/bin/docker logs -f OpenVPN-Client
 ExecStop=-/usr/bin/docker stop OpenVPN-Client
 ExecStop=-/bin/sh -c "[ -f /tmp/docker-openvpn/resolv.conf.orig ] && cp /tmp/docker-openvpn/resolv.conf.orig /etc/resolv.conf ; rm -rf /tmp/docker-openvpn/"
+ExecStopPost=-iptables -t nat -D POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j MASQUERADE
 SuccessExitStatus=143
 
 [Install]
