@@ -3,8 +3,6 @@
 set -e  # Exit immediately if a command exits with a non-zero status.
 set -x  # All executed commands are printed to the terminal
 
-cp /tmp/contents/scripts/boot /usr/local/boot
-
 aptitude update ; aptitude install -R -y openvpn openssl
 mkdir /etc/openvpn/keys
 chmod 700 /etc/openvpn/keys
@@ -19,7 +17,10 @@ cp /tmp/contents/static/client.conf /etc/openvpn/
 cp /tmp/contents/static/update-resolv-conf /etc/openvpn/
 cp /tmp/contents/static/update-resolv /usr/bin/
 
-apt-get -y autoremove ; aptitude -y autoclean ; apt-get -y autoclean
+sed -i '$i update-resolv --start' /usr/local/boot
+sed -i '$i service openvpn start > /dev/null 2>&1' /usr/local/boot
+
+apt-get -y autoremove ; aptitude -y autoclean ; apt-get -y autoclean ; apt clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.aptitude /etc/openvpn/server /etc/openvpn/client
 
 mkdir /tmp/docker-openvpn /tmp/host
